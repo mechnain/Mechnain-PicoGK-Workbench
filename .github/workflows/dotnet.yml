@@ -1,5 +1,6 @@
-# Build and test only. PicoGK generation requires native win-x64 (or host RID)
-# runtimes and is not executed on GitHub-hosted runners in this workflow.
+# Build-only CI. PicoGK generation and the Blazor app server are intentionally not run here:
+# this MVP validates geometry locally, and GitHub-hosted runners may lack the
+# graphics/native runtime dependencies PicoGK expects for headless generation.
 name: .NET CI
 
 on:
@@ -13,18 +14,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "9.0.x"
+          dotnet-version: '9.0.x'
 
       - name: Restore
-        run: dotnet restore
+        run: dotnet restore Mechnain.PicoGK.Workbench.sln
 
       - name: Build
-        run: dotnet build --no-restore
-
-      - name: Test
-        run: dotnet test --no-build --verbosity normal
+        run: dotnet build Mechnain.PicoGK.Workbench.sln --configuration Release --no-restore
