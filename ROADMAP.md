@@ -18,8 +18,8 @@ Phased plan for Mechnain PicoGK Workbench. Scope stays local-first and engineeri
 - [x] CONTRIBUTING, CHANGELOG, issue templates
 - [x] GitHub Actions: restore / build / test
 - [x] `exports/examples/` sample metadata
-- [ ] Screenshots in `docs/assets/screenshots/`
-- [ ] Public README embeds after screenshots exist
+- [x] Screenshots in `docs/assets/screenshots/`
+- [x] Public README embeds
 
 ## V0.3 — Output inspection
 
