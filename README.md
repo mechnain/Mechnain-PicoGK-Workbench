@@ -55,11 +55,17 @@ Store captures under `docs/assets/screenshots/`. See [docs/screenshot_checklist.
 | Recent Runs | `docs/assets/screenshots/recent-runs.png` | Saved run history |
 | Exports | `docs/assets/screenshots/exports.png` | Generated output folders |
 
-Screenshots are not committed yet. After you capture them locally, add the files above and uncomment the embed block in this section—or link them from your fork’s README.
-
-<!-- When screenshots exist, uncomment:
 ![Home](docs/assets/screenshots/home.png)
--->
+
+<p align="center">
+  <img src="docs/assets/screenshots/generator-library.png" alt="Generator Library" width="49%" />
+  <img src="docs/assets/screenshots/generator-detail.png" alt="Generator Detail" width="49%" />
+</p>
+
+<p align="center">
+  <img src="docs/assets/screenshots/recent-runs.png" alt="Recent Runs" width="49%" />
+  <img src="docs/assets/screenshots/exports.png" alt="Exports" width="49%" />
+</p>
 
 ## Architecture
 

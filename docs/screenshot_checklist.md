@@ -8,11 +8,11 @@ Recommended size: **1920×1080** or **1600×900**. Use the dark theme; crop brow
 
 | # | File | Page / subject | Check |
 | --- | --- | --- | --- |
-| 1 | `home.png` | `/` — hero, workflow strip, MVP panel | [ ] |
-| 2 | `generator-library.png` | `/generators` — all five cards | [ ] |
-| 3 | `generator-detail.png` | `/generators/primitive-test` — parameters + buttons | [ ] |
-| 4 | `recent-runs.png` | `/recent-runs` — table with status badges | [ ] |
-| 5 | `exports.png` | `/exports` — root path + folder list | [ ] |
+| 1 | `home.png` | `/` — hero, workflow strip, MVP panel | [x] |
+| 2 | `generator-library.png` | `/generators` — all five cards | [x] |
+| 3 | `generator-detail.png` | `/generators/primitive-test` — parameters + buttons | [x] |
+| 4 | `recent-runs.png` | `/recent-runs` — table with status badges | [x] |
+| 5 | `exports.png` | `/exports` — root path + folder list | [x] |
 
 ## Optional (strong credibility)
 

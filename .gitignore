@@ -43,3 +43,6 @@ exports/runs_index.json
 # Saved parameter variants (local experiments)
 projects/**/*.json
 !projects/.gitkeep
+
+# Screenshot capture script (optional dev tooling)
+scripts/node_modules/
