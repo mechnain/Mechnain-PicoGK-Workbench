@@ -1,10 +1,36 @@
 # Generator Authoring
 
-How to add a new PicoGK generator to the workbench without breaking the existing registry or export pipeline.
+Developer guide for adding a PicoGK generator to the workbench without breaking the registry or export pipeline.
 
-## 1. Create the generator class
+## Generator folder structure
 
-Add a class in `src/Workbench.Generators`, inheriting `WorkbenchGeneratorBase`:
+```text
+generators/{generator-id}/
+  manifest.json          # Describes parameters, outputs, measurements (mirror of C# manifest)
+  default_params.json    # Default parameter values
+
+src/Workbench.Generators/
+  MyGenerator.cs         # PicoGK geometry implementation
+
+src/Workbench.Generators/GeneratorRegistry.cs
+  Register(new MyGenerator());
+```
+
+## manifest.json (on disk)
+
+Align with the C# `GeneratorManifest`:
+
+- `id` — kebab-case, unique
+- `name`, `description`, `category`, `difficulty`
+- `requiredMeasurements` — strings the engineer must know
+- `parameters` — name, type, label, unit, min/max, default
+- `outputTypes` — e.g. `["stl"]` only; do not list screenshot until implemented
+
+## default_params.json
+
+JSON object keyed by parameter name. Values must match types the generator reads (`number`, `boolean`, `string`).
+
+## Generator class
 
 ```csharp
 public sealed class MyGenerator : WorkbenchGeneratorBase
@@ -15,65 +41,90 @@ public sealed class MyGenerator : WorkbenchGeneratorBase
         Name = "My Generator",
         Category = "Mechanical",
         Difficulty = "Starter",
-        Description = "Short honest description.",
+        Description = "Honest one-line purpose.",
+        RequiredMeasurements = ["Overall width (mm)"],
         Parameters = [ /* GeneratorParameter entries */ ],
         OutputTypes = ["stl"]
     };
 
     protected override void GenerateGeometry(PicoGeneration generation)
     {
-        using Voxels voxels = generation.Render(/* implicit body */);
+        // Real PicoGK: implicit bodies → voxels → mesh
+        using Voxels voxels = generation.Render(/* body */);
         generation.SaveStl(voxels, "my_part.stl");
     }
 }
 ```
 
-Use real PicoGK operations only. Do not stub STL paths without calling `SaveStl`.
+**Rules:**
 
-## 2. Create manifest files on disk
+- Call `SaveStl` only with real voxel/mesh data
+- Read parameters via `generation` / request values consistently
+- Do not write fake STL paths without generating geometry
 
-```text
-generators/my-generator/manifest.json
-generators/my-generator/default_params.json
-```
+## Registration
 
-Parameter names must match what `GenerateGeometry` reads. The UI and CLI load defaults from these files when present; built-in manifests come from the C# class via `GeneratorRegistry`.
-
-## 3. Register the generator
-
-In `GeneratorRegistry`:
+In `GeneratorRegistry` constructor or registration method:
 
 ```csharp
 Register(new MyGenerator());
 ```
 
-## 4. Test with CLI
+## Parameter validation
 
-```powershell
-cd "D:\Mechnain Projects\Mechnain PicoGK Workbench V1\Mechnain-PicoGK-Workbench"
+- Use manifest `min` / `max` / `step` for UI hints
+- Validate in `GenerateGeometry` or base class hooks when invalid combos would silently fail
+- Return clear errors in logs when parameters are out of range
+
+## Output artifacts
+
+The base pipeline writes:
+
+- `used_params.json`, `result.json`, `run_log.txt`
+- Note templates: `notes.md`, `print_settings.md`
+- STL files listed in `result.json` → `generatedFiles`
+
+## CLI testing
+
+```bash
 dotnet build
-dotnet run --project src\Workbench.Runner -- --generator my-generator --quality preview
+dotnet run --project src/Workbench.Runner -- --generator my-generator --quality preview
 ```
 
-## 5. Verify the output folder
+Inspect:
 
-Confirm under `exports/my-generator/{timestamp}_{variant}/`:
+```text
+exports/my-generator/{timestamp}_{variant}/
+```
 
-- `used_params.json` — input parameters
-- `result.json` — success flag and file list
-- `run_log.txt` — PicoGK log lines
-- `*.stl` — only if generation succeeded
+Then run the same generator from the Blazor UI to confirm parity.
 
-Open the app → Generator Library → your generator → run preview from the UI to confirm the same pipeline.
+## New generator checklist
 
-## 6. Tests (when appropriate)
+- [ ] Define purpose and maturity label (Starter / Experimental / Verified)
+- [ ] Define required measurements
+- [ ] Create `generators/{id}/manifest.json`
+- [ ] Create `generators/{id}/default_params.json`
+- [ ] Implement `WorkbenchGeneratorBase` subclass
+- [ ] Register in `GeneratorRegistry`
+- [ ] Run CLI preview and confirm `result.json` success
+- [ ] Confirm `run_log.txt` shows PicoGK steps
+- [ ] Inspect STL in external viewer
+- [ ] Update README generator table if user-facing
+- [ ] Add test if touching shared registry/path logic
+- [ ] Mark maturity honestly in DESIGN_LOG
 
-Add a test in `src/Workbench.Tests` if the generator touches shared utilities or you need a regression guard (e.g. manifest parsing, path sanitization).
+## Documentation checklist
 
-## Checklist
+- [ ] One-line description matches actual geometry
+- [ ] No production-ready claim without print evidence
+- [ ] Limitations noted (e.g. reserved parameters, unsupported angles)
 
-- [ ] Unique `Id` (kebab-case)
-- [ ] Honest difficulty and required measurements
-- [ ] Preview and final both tested or documented if one is unsupported
-- [ ] No fake screenshot or viewer outputs
-- [ ] DESIGN_LOG / README updated if the generator is user-facing
+## Tests
+
+Add to `src/Workbench.Tests` when:
+
+- Registry must list the new id
+- Path sanitization or manifest parsing changes
+
+Do not require PicoGK native runtime in unit tests unless you add an explicit integration job (not in default CI).

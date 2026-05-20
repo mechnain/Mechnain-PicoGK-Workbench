@@ -22,25 +22,24 @@ Thumbs.db
 Desktop.ini
 .DS_Store
 
-# Logs (local validation / debug only)
+# Local logs
 exports/logs/
 *.log
 
-# Generated run outputs — keep structure and small examples, ignore bulk local runs
-# Uncomment the next line to ignore all generated runs (recommended before first GitHub push):
-# exports/**/*
-# !exports/.gitkeep
-# !exports/runs_index.json
-# !exports/**/README.md
-
-# Ignore timestamped run folders but keep index and gitkeep
+# --- exports/ ---
+# Generated runs are local artifacts. Only examples/ and .gitkeep are tracked.
 exports/**/*
 !exports/.gitkeep
-!exports/runs_index.json
+!exports/examples/
+!exports/examples/**/*
+!exports/examples/**/**/*
 
-# Ignore large STL artifacts in exports (regenerate via CLI); keep docs in run folders if needed
+# STL files: regenerate via CLI (including under examples/)
 exports/**/*.stl
 
-# User-specific project parameter saves (optional local variants)
+# Local run index (machine-specific paths); created on first UI/CLI run
+exports/runs_index.json
+
+# Saved parameter variants (local experiments)
 projects/**/*.json
 !projects/.gitkeep

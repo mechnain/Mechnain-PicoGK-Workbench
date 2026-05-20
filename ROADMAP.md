@@ -1,53 +1,70 @@
 # Roadmap
 
-Phased goals for Mechnain PicoGK Workbench. Each phase builds on the previous without rewriting the core runner.
+Phased plan for Mechnain PicoGK Workbench. Scope stays local-first and engineering-honest.
 
 ## V0.1 — Working MVP
 
 - [x] Local Blazor app
-- [x] Generator library and parameter editor
-- [x] CLI runner (`--list`, `--generator`)
-- [x] Organized `exports/` run folders
-- [x] Real PicoGK STL generation (verified on `primitive-test`)
-- [x] Recent runs index and exports browser
-- [x] Built-in starter generators
+- [x] CLI runner
+- [x] Generator registry
+- [x] Primitive PicoGK STL output verified
+- [x] Structured run folders under `exports/`
+- [x] Starter generator library (5 generators)
 
-## V0.2 — Polished engineering UI
+## V0.2 — Repo and UI polish
 
-- [x] Mechnain dark theme and copper accents
-- [x] Home dashboard, About page, improved docs cards
-- [x] GitHub-ready README, LICENSE, `.gitignore`
-- [ ] README screenshots captured locally
-- [ ] Optional `mechnain-logo.png` raster for favicon
+- [x] Dark Mechnain theme and logo
+- [x] README, DESIGN_LOG, ROADMAP, docs cleanup
+- [x] CONTRIBUTING, CHANGELOG, issue templates
+- [x] GitHub Actions: restore / build / test
+- [x] `exports/examples/` sample metadata
+- [ ] Screenshots in `docs/assets/screenshots/`
+- [ ] Public README embeds after screenshots exist
 
-## V0.3 — STL preview in browser
+## V0.3 — Output inspection
 
-- [ ] Lightweight STL preview on run output page (no fake viewer claims until shipped)
-- [ ] Thumbnail or mesh summary where practical
+- [ ] Browser STL preview on run output page
+- [ ] Run detail page improvements
+- [ ] File size / artifact summary in UI
+- [ ] Export browser filters and sorting
 
 ## V0.4 — Useful mechanical generators
 
-- [ ] Rover wheel: print-tested variants documented in run folders
-- [ ] Servo bracket: fit clearance validated on hardware
-- [ ] Electronics enclosure: board/measured envelope workflow
-- [ ] Lattice coupon: comparative print/test notes
+- [ ] Rover wheel — print-tested variants documented
+- [ ] Servo bracket — clearance validated on hardware
+- [ ] Electronics enclosure — measured board workflow
+- [ ] Lattice coupon — comparative test notes
+- [ ] Sensor mount (new generator candidate)
 
-Generators remain parameterized templates until print feedback says otherwise.
+Generators stay **starter** until print feedback says otherwise.
 
-## V0.5 — Print / test workflow templates
+## V0.5 — Print / test workflow
 
-- [ ] Structured `notes.md` / test table templates in UI
-- [ ] Run detail page linking parameters → STL → print result
-- [ ] Portfolio export helpers from [docs/portfolio_export.md](docs/portfolio_export.md)
+- [ ] Print settings templates per material
+- [ ] Test plan templates in UI
+- [ ] `notes.md` prompts per generator type
+- [ ] Result comparison table across variants
 
-## V1.0 — Parameter-to-print workflow
+## V0.6 — AI-assisted layer
 
-- [ ] End-to-end documented variants with real printed parts and photos
-- [ ] Clear which generators are validated vs experimental
+- [ ] Natural language → generator recommendation
+- [ ] Parameter JSON drafting from measurements
+- [ ] Constraint / sanity warnings before run
+- [ ] Documentation draft from run folder
+- [ ] **User approval required** before any generation
+
+Not autonomous design—assisted drafting only.
+
+## V1.0 — Validated local-first workbench
+
+- [ ] Generators with documented print/test evidence
+- [ ] Complete docs + screenshots + example outputs
+- [ ] Stable install path for new clones
 - [ ] Optional background jobs for long final-quality runs
 
-## Not planned for this repo
+## Explicitly not planned
 
-- Cloud hosting, authentication, or multi-tenant SaaS positioning
-- Topology optimization or AI “generative design” marketing
+- Cloud-hosted CAD or multi-tenant SaaS positioning
+- Topology optimization or “AI generative design” hype
 - LEAP 71 endorsement or PicoGK source forks
+- FEA solver integration in this repo

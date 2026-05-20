@@ -1,0 +1,10 @@
+{
+  "success": true,
+  "message": "Primitive Test generated successfully.",
+  "outputDirectory": "exports/examples/primitive-test/sample_run",
+  "generatedFiles": [
+    "exports/examples/primitive-test/sample_run/primitive_test.stl"
+  ],
+  "logText": "[example] PicoGK library created with voxel size 0.8 mm.\n[example] Saved STL: exports/examples/primitive-test/sample_run/primitive_test.stl\n",
+  "timestamp": "2026-05-20T13:02:14.8171605Z"
+}

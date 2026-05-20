@@ -1,72 +1,89 @@
 # Design Log
 
-## 2026-05-20 — V0.1 baseline
+Engineering notes for Mechnain PicoGK Workbench—what works, what was checked, and what is still open.
 
-Initial scope: general-purpose local PicoGK workbench (not a single-purpose gauntlet tool).
+## Purpose
 
-### Implemented
+Provide a local-first loop for parameterized PicoGK geometry:
 
-- Blazor app (`src/Workbench.App`)
-- CLI runner (`src/Workbench.Runner`)
-- Shared models (`src/Workbench.Core`)
-- Built-in generators (`src/Workbench.Generators`)
-- Tests (`src/Workbench.Tests`)
+**generator → parameters → PicoGK → STL/artifacts → logs → documentation → print/test/iterate**
 
-PicoGK API usage (from package behavior and examples):
+without rewriting `Program.cs` for every variant or losing track of outputs between prints.
 
-- `new Library(voxelSize)` for headless generation
-- Implicit bodies, voxels, boolean ops, mesh export via `SaveToStlFile`
+## Build status
 
-### Verified (2026-05-20 UI polish pass)
-
-- `dotnet restore` / `dotnet build` — 0 warnings
-- `dotnet test` — 3 passed
-- CLI `--list` — 5 generators
-- CLI `primitive-test` → `exports/primitive-test/ui_polish_validation/primitive_test.stl`
-- App HTTP 200: `/`, `/generators`, `/recent-runs`, `/exports`, `/documentation`, `/about`, `/assets/mechnain-logo.svg`
-
-### Verified (earlier)
-
-- `dotnet restore` / `dotnet build` succeed
-- CLI `--list` lists built-in generators
-- `primitive-test` produces a real STL under `exports/primitive-test/`
-- Rover wheel and electronics enclosure runs logged in `exports/runs_index.json` with STL paths in `result.json` where generation succeeded
-- Local app pages: Home, Generator Library, generator detail, Recent Runs, Exports, Documentation, About
-
-### UI (V0.2 polish)
-
-- Dark Mechnain theme via CSS variables (charcoal base, copper accents)
-- Logo at `src/Workbench.App/wwwroot/assets/mechnain-logo.png` (from `Mechnain Labs Logo.png` in the workbench parent folder; SVG copy also kept as fallback)
-- No in-browser 3D viewer — external slicer/viewer only
-
-### Generator status
-
-| Generator | STL export | Notes |
+| Item | Status | Evidence |
 | --- | --- | --- |
-| `primitive-test` | Yes (verified) | Smoke / regression |
-| `rover-wheel` | Logged success | Starter wheel template |
-| `electronics-enclosure` | Logged success (base + lid) | Starter enclosure |
-| `servo-bracket` | Not fully validated in this log | Starter bracket |
-| `lattice-coupon` | Not fully validated in this log | Comparison coupon |
+| Local app | Working | `dotnet run --project src/Workbench.App` |
+| CLI runner | Working | `--list`, `--generator` |
+| Primitive test STL | Verified | CLI run; `result.json` + STL path in log |
+| Other generators | Starter | Runs logged locally; not mechanically validated |
+| UI polish (dark theme) | Done | Blazor pages + CSS variables |
+| README screenshots | Pending | Files not in `docs/assets/screenshots/` yet |
+| STL viewer in browser | Not implemented | External viewer only |
+| GitHub Actions CI | Added | `restore` / `build` / `test` only (no PicoGK in CI) |
 
-Do not claim all generators are production-ready.
+## What was verified
 
-### Output / export status
+- Solution builds on .NET 9 (`dotnet restore`, `dotnet build`)
+- Unit tests pass (`dotnet test` — registry/runner contracts, no PicoGK in tests)
+- CLI lists five built-in generators
+- `primitive-test` produces a real STL via PicoGK (`SaveStl` / mesh export)
+- Blazor routes respond: Home, Generator Library, generator detail, Recent Runs, Exports, Documentation, About
+- Export folder layout: `used_params.json`, `result.json`, `run_log.txt`, note templates
 
-- Run folders: `used_params.json`, `result.json`, `run_log.txt`, `notes.md`, `print_settings.md`, STL when `SaveStl` succeeds
-- Screenshot output type in manifests is **not** implemented — no fake screenshot files
-- `exports/runs_index.json` tracks recent runs for the UI
+## What is not verified
 
-### Known limitations
+- Mechanical strength or load capacity of any part
+- Printability of every generator without per-material tuning
+- Fit on real hardware for rover wheel, bracket, enclosure, lattice coupon
+- Topology optimization (not in scope)
+- FEA or simulation coupling
+- In-browser STL preview
+- Cloud deployment or multi-user operation
+- AI-assisted parameter drafting (roadmap only)
 
-- Built-in generators are starter mechanical templates, not final production designs
-- `bracketAngleDeg` documented as reserved for future angled bracket variants
-- Manifest JSON under `generators/` mirrors C# manifests; registry uses built-in generator classes
-- Long final-quality runs may block the Blazor request until PicoGK completes
-- UI does not embed PicoGK viewer or STL preview (roadmap V0.3)
+## Design decisions
 
-### Honesty
+| Decision | Rationale |
+| --- | --- |
+| Local-first | PicoGK native runtime and engineering data stay on the workstation |
+| Blazor UI + CLI runner | Same `GeneratorRegistry` and export layout from UI or terminal |
+| JSON manifests + `default_params.json` | Portable parameter contracts per generator |
+| `exports/` run folders | Traceability: parameters, logs, and outputs stay together |
+| External STL viewer for MVP | Avoid fake embedded 3D claims; ship preview in V0.3 |
+| Built-in C# generators + disk manifests | Registry discovers classes; JSON mirrors manifests for tooling |
+| Ignore bulk `exports/` in git | Generated runs are local artifacts; `exports/examples/` for shape only |
 
-- Not topology optimization or generative AI design
+## Generator maturity (honest)
+
+| Generator | STL in dev runs | Mechanical validation |
+| --- | --- | --- |
+| `primitive-test` | Yes | Smoke test only |
+| `rover-wheel` | Logged locally | Not print-certified |
+| `electronics-enclosure` | Logged locally | Not print-certified |
+| `servo-bracket` | Not fully logged here | Starter template |
+| `lattice-coupon` | Not fully logged here | Starter template |
+
+## Known limitations
+
+- Long final-quality PicoGK jobs may block the Blazor request until complete
+- `exports/runs_index.json` stores local paths; regenerated per machine
+- Screenshot output type in manifests is not implemented
+- `bracketAngleDeg` reserved for future angled bracket variants
+- CI does not run PicoGK generation (native/runtime constraints on GitHub-hosted runners)
+
+## Next experiments
+
+- Capture README screenshots ([docs/screenshot_checklist.md](docs/screenshot_checklist.md))
+- Rover wheel print + notes in run folder
+- Enclosure fit check on measured board envelope
+- Lattice coupon compression comparison
+- Browser STL preview spike (V0.3)
+- AI-assisted layer only with explicit user approval before generation (V0.6)
+
+## Honesty
+
 - Not affiliated with or endorsed by LEAP 71
-- No fake STL or fake 3D viewer claims
+- Not generative AI design or topology optimization marketing
+- No fake STL, viewer, or screenshot artifacts in the repo

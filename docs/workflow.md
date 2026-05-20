@@ -1,44 +1,99 @@
 # Workflow
 
-End-to-end loop for parameterized mechanical design with Mechnain PicoGK Workbench.
+Practical guide for parameterized mechanical design with Mechnain PicoGK Workbench.
 
-## Steps
+> **Warning:** A generated STL is not automatically a validated mechanical part. Check dimensions, clearances, loads, print orientation, material, and fit before relying on any part physically.
 
-1. **Choose a generator** — Generator Library in the app, or `dotnet run --project src\Workbench.Runner -- --list`.
-2. **Enter measured dimensions** — Use the parameter page or a JSON params file aligned with the manifest.
-3. **Generate preview** — Coarser voxel size for fast iteration (`preview` quality).
-4. **Inspect output** — Open the run folder or Recent Runs → **Open run**. View STL in Bambu Studio or another viewer (no in-app 3D viewer in V0.2).
-5. **Generate final** — Finer voxels when the form matches intent (`final` quality); may take longer.
-6. **Slice** — Import STL into Bambu Studio or your slicer; apply material-specific settings.
-7. **Print** — Fabricate the part; record machine, material, and issues in `notes.md`.
-8. **Test** — Check fit, clearance, strength, or assembly against measured requirements.
-9. **Document results** — Update `notes.md`, `print_settings.md`, and optionally portfolio snippets per [portfolio_export.md](portfolio_export.md).
-10. **Iterate** — Adjust parameters, save a new variant name, and run again.
+## Engineering workflow
 
-## Preview vs final
+```text
+Select generator → Enter measurements → Preview → Inspect STL → Final → Slice → Print → Test → Document → Iterate
+```
 
-| Mode | Voxel size | Use |
-| --- | --- | --- |
-| Preview | Coarser | Quick shape and proportion checks |
-| Final | Finer | Export for slicing when parameters are stable |
+## 1. Generator selection
 
-## Where files live
+- **UI:** Generator Library → pick by category and required measurements
+- **CLI:** `dotnet run --project src/Workbench.Runner -- --list`
+
+Choose based on part type (smoke test, wheel, bracket, enclosure, coupon)—not every generator is validated on hardware.
+
+## 2. Parameter entry
+
+- Use the generator detail page or `generators/{id}/default_params.json` as a starting point
+- Match **required measurements** from the manifest (real caliper/board dimensions)
+- Save variants with descriptive names (`axle_fit_v2`, not `test4`)
+- Optional: **Save Parameters JSON** or preset from the UI into `projects/`
+
+## 3. Preview vs final
+
+| Mode | CLI flag / UI | Voxel size | Use |
+| --- | --- | --- | --- |
+| Preview | `preview` | Coarser | Fast shape and proportion checks |
+| Final | `final` | Finer | STL for slicing when parameters are stable |
+
+Preview first. Final can take noticeably longer on complex generators.
+
+## 4. Exported artifacts
+
+Each run creates:
 
 ```text
 exports/{generatorId}/{timestamp}_{variant}/
 ```
 
-The UI writes the same layout as the CLI. Keep variant names descriptive (`axle_clearance_v2`, not `test3`).
+| File | Purpose |
+| --- | --- |
+| `used_params.json` | Exact inputs |
+| `result.json` | Success, paths, message |
+| `run_log.txt` | PicoGK and runner log |
+| `notes.md` | Your print/test notes |
+| `print_settings.md` | Slicer settings |
+| `*.stl` | Geometry when export succeeds |
 
-## CLI example
+Recent Runs and Exports pages link to these folders.
 
-```powershell
-cd "D:\Mechnain Projects\Mechnain PicoGK Workbench V1\Mechnain-PicoGK-Workbench"
-dotnet run --project src\Workbench.Runner -- --generator primitive-test --quality preview
+## 5. STL inspection
+
+There is **no in-browser 3D viewer** in V0.2. Open STL in:
+
+- Bambu Studio / PrusaSlicer — manufacturability
+- MeshLab / Windows 3D Viewer — quick visual check
+
+Confirm scale, wall thickness, holes, and clearances against design intent.
+
+## 6. Slicing and printing
+
+- Orient for strength and surface quality
+- Record material, nozzle, layer height in `print_settings.md`
+- Note supports, brim, or enclosure requirements
+
+## 7. Testing
+
+- Dimensional check (calipers vs parameters)
+- Fit with mating parts (axle, board, servo, lid)
+- Functional check (rotation, latch, airflow) as applicable
+- Record failures honestly in `notes.md`
+
+## 8. Document results
+
+Update the run folder before starting the next variant:
+
+- What changed vs last variant
+- Print outcome (warp, stringing, tolerance)
+- Measured fit result
+- Next parameter change
+
+Portfolio templates: [portfolio_export.md](portfolio_export.md)
+
+## CLI quick reference
+
+```bash
+dotnet run --project src/Workbench.Runner -- --generator primitive-test --quality preview
 ```
 
-## Honesty
+## What this workflow is not
 
-- Generators are starter templates until you validate prints.
-- Failed runs still create folders with logs — check `result.json` and `run_log.txt`.
-- This workflow is not topology optimization or automated design-of-experiments (future roadmap items may add batch runs).
+- Topology optimization
+- Automated design-of-experiments (future consideration)
+- FEA or certified structural sign-off
+- Cloud rendering or team collaboration (local-first today)
