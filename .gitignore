@@ -46,3 +46,4 @@ projects/**/*.json
 
 # Screenshot capture script (optional dev tooling)
 scripts/node_modules/
+scripts/package-lock.json

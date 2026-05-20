@@ -19,7 +19,7 @@ without rewriting `Program.cs` for every variant or losing track of outputs betw
 | Primitive test STL | Verified | CLI run; `result.json` + STL path in log |
 | Other generators | Starter | Runs logged locally; not mechanically validated |
 | UI polish (dark theme) | Done | Blazor pages + CSS variables |
-| README screenshots | Pending | Files not in `docs/assets/screenshots/` yet |
+| README screenshots | Done | Five PNGs in `docs/assets/screenshots/` |
 | STL viewer in browser | Not implemented | External viewer only |
 | GitHub Actions CI | Added | `restore` / `build` / `test` only (no PicoGK in CI) |
 
