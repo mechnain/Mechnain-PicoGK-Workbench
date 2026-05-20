@@ -1,0 +1,81 @@
+@page "/run-output"
+@rendermode InteractiveServer
+@inject WorkbenchAppService Workbench
+
+<PageTitle>Run Output</PageTitle>
+
+<div class="wb-page-header">
+    <h1>Run Output</h1>
+    <p class="lead mb-0">Parameters, logs, and generated files for this PicoGK run folder.</p>
+</div>
+
+@if (Result is null)
+{
+    <div class="alert alert-warning">No result found for this output folder.</div>
+}
+else
+{
+    <div class="alert @(Result.Success ? "alert-success" : "alert-danger")">
+        <strong>@(Result.Success ? "Success" : "Failure")</strong> - @Result.Message
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Output directory</label>
+        <input class="form-control" readonly value="@Result.OutputDirectory" />
+    </div>
+
+    <div class="d-flex flex-wrap gap-2 mb-3">
+        <button class="btn btn-outline-primary" @onclick="OpenFolder">Open Folder</button>
+        <button class="btn btn-outline-secondary" @onclick="CreateNotes">Create notes.md</button>
+        <button class="btn btn-outline-secondary" @onclick="ShowResumeBullet">Copy Resume Bullet Template</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(ResumeBullet))
+    {
+        <textarea class="form-control mb-3" rows="3">@ResumeBullet</textarea>
+    }
+
+    <h2 class="h5">Generated Files</h2>
+    <ul>
+        @foreach (string file in Result.GeneratedFiles)
+        {
+            <li><code>@file</code></li>
+        }
+    </ul>
+
+    <h2 class="h5">Log</h2>
+    <pre class="p-3 wb-log-pre rounded">@Result.LogText</pre>
+}
+
+@code {
+    [SupplyParameterFromQuery] public string? OutputDirectory { get; set; }
+
+    GenerationResult? Result;
+    string? ResumeBullet;
+
+    protected override void OnParametersSet()
+    {
+        if (!string.IsNullOrWhiteSpace(OutputDirectory))
+            Result = Workbench.ReadResult(OutputDirectory);
+    }
+
+    void OpenFolder()
+    {
+        if (Result is not null)
+            Workbench.OpenFolder(Result.OutputDirectory);
+    }
+
+    void CreateNotes()
+    {
+        if (Result is not null)
+            Workbench.CreateNotes(Result.OutputDirectory);
+    }
+
+    void ShowResumeBullet()
+    {
+        if (Result is null)
+            return;
+
+        ResumeBullet = $"- Built a PicoGK computational design variant, generating {Result.GeneratedFiles.Count} manufacturing artifact(s) with parameterized geometry and documented print/test outputs.";
+    }
+}

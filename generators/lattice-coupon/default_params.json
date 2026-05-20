@@ -1,0 +1,9 @@
+{
+  "lengthMm": 60,
+  "widthMm": 30,
+  "heightMm": 20,
+  "ribRadiusMm": 1.8,
+  "cellCountX": 4,
+  "cellCountY": 3,
+  "patternType": "cross"
+}

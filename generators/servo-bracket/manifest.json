@@ -1,0 +1,119 @@
+{
+  "id": "servo-bracket",
+  "name": "Servo Bracket",
+  "description": "U-bracket with servo pocket, base plate, mounting holes, and horn clearance.",
+  "category": "Robotics",
+  "difficulty": "Intermediate",
+  "requiredMeasurements": [
+    "Servo body width",
+    "Servo body length",
+    "Servo body height",
+    "Screw diameter"
+  ],
+  "parameters": [
+    {
+      "name": "servoWidthMm",
+      "label": "Servo width",
+      "type": "number",
+      "unit": "mm",
+      "defaultValue": 20,
+      "min": 8,
+      "max": 60,
+      "step": 0.5,
+      "description": "Servo body width.",
+      "required": true
+    },
+    {
+      "name": "servoLengthMm",
+      "label": "Servo length",
+      "type": "number",
+      "unit": "mm",
+      "defaultValue": 40,
+      "min": 12,
+      "max": 80,
+      "step": 0.5,
+      "description": "Servo body length.",
+      "required": true
+    },
+    {
+      "name": "servoHeightMm",
+      "label": "Servo height",
+      "type": "number",
+      "unit": "mm",
+      "defaultValue": 38,
+      "min": 10,
+      "max": 80,
+      "step": 0.5,
+      "description": "Servo body height.",
+      "required": true
+    },
+    {
+      "name": "wallThicknessMm",
+      "label": "Wall thickness",
+      "type": "number",
+      "unit": "mm",
+      "defaultValue": 3,
+      "min": 1.5,
+      "max": 8,
+      "step": 0.25,
+      "description": "Printed bracket wall thickness.",
+      "required": true
+    },
+    {
+      "name": "baseLengthMm",
+      "label": "Base length",
+      "type": "number",
+      "unit": "mm",
+      "defaultValue": 60,
+      "min": 20,
+      "max": 120,
+      "step": 1,
+      "description": "Mounting base length.",
+      "required": true
+    },
+    {
+      "name": "baseWidthMm",
+      "label": "Base width",
+      "type": "number",
+      "unit": "mm",
+      "defaultValue": 38,
+      "min": 16,
+      "max": 100,
+      "step": 1,
+      "description": "Mounting base width.",
+      "required": true
+    },
+    {
+      "name": "screwHoleDiameterMm",
+      "label": "Screw hole diameter",
+      "type": "number",
+      "unit": "mm",
+      "defaultValue": 3.2,
+      "min": 1.5,
+      "max": 8,
+      "step": 0.1,
+      "description": "Mounting screw clearance.",
+      "required": true
+    },
+    {
+      "name": "bracketAngleDeg",
+      "label": "Bracket angle",
+      "type": "number",
+      "unit": "deg",
+      "defaultValue": 90,
+      "min": 45,
+      "max": 135,
+      "step": 1,
+      "description": "Reserved for future angled side-wall variants.",
+      "required": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Standard micro/mini servo bracket",
+      "description": "General servo bracket starter geometry.",
+      "parameterValues": {}
+    }
+  ],
+  "outputTypes": [ "stl", "log", "json", "notes" ]
+}

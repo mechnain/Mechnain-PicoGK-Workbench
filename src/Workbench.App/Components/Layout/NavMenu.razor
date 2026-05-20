@@ -1,0 +1,56 @@
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid p-0">
+        <a class="brand-block" href="">
+            <img class="brand-logo" src="assets/mechnain-logo.png" alt="Mechnain Labs" />
+            <span class="brand-text">
+                <span class="brand-name">Mechnain</span>
+                <span class="brand-sub">PicoGK Workbench</span>
+            </span>
+        </a>
+    </div>
+</div>
+
+<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="nav flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="nav-icon" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="generators">
+                <span class="nav-icon" aria-hidden="true"></span> Generator Library
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="recent-runs">
+                <span class="nav-icon" aria-hidden="true"></span> Recent Runs
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="exports">
+                <span class="nav-icon" aria-hidden="true"></span> Exports
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="documentation">
+                <span class="nav-icon" aria-hidden="true"></span> Documentation
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="about">
+                <span class="nav-icon" aria-hidden="true"></span> About
+            </NavLink>
+        </div>
+    </nav>
+    <div class="nav-footer d-none d-md-block">
+        Independent engineering workbench · PicoGK
+    </div>
+</div>

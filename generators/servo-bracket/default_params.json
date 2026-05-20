@@ -1,0 +1,10 @@
+{
+  "servoWidthMm": 20,
+  "servoLengthMm": 40,
+  "servoHeightMm": 38,
+  "wallThicknessMm": 3,
+  "baseLengthMm": 60,
+  "baseWidthMm": 38,
+  "screwHoleDiameterMm": 3.2,
+  "bracketAngleDeg": 90
+}

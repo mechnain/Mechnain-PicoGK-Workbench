@@ -1,0 +1,116 @@
+{
+  "id": "electronics-enclosure",
+  "name": "Electronics Enclosure",
+  "description": "Board tray with walls, standoffs, wire openings, and optional lid.",
+  "category": "Electronics",
+  "difficulty": "Intermediate",
+  "requiredMeasurements": [
+    "Board length",
+    "Board width",
+    "Board component height",
+    "Mounting hole diameter"
+  ],
+  "parameters": [
+    {
+      "name": "boardLengthMm",
+      "label": "Board length",
+      "type": "number",
+      "unit": "mm",
+      "defaultValue": 70,
+      "min": 20,
+      "max": 160,
+      "step": 1,
+      "description": "Circuit board length.",
+      "required": true
+    },
+    {
+      "name": "boardWidthMm",
+      "label": "Board width",
+      "type": "number",
+      "unit": "mm",
+      "defaultValue": 45,
+      "min": 15,
+      "max": 120,
+      "step": 1,
+      "description": "Circuit board width.",
+      "required": true
+    },
+    {
+      "name": "boardHeightMm",
+      "label": "Board height",
+      "type": "number",
+      "unit": "mm",
+      "defaultValue": 14,
+      "min": 4,
+      "max": 60,
+      "step": 0.5,
+      "description": "Component clearance height.",
+      "required": true
+    },
+    {
+      "name": "wallThicknessMm",
+      "label": "Wall thickness",
+      "type": "number",
+      "unit": "mm",
+      "defaultValue": 3,
+      "min": 1.5,
+      "max": 8,
+      "step": 0.25,
+      "description": "Enclosure wall thickness.",
+      "required": true
+    },
+    {
+      "name": "clearanceMm",
+      "label": "Clearance",
+      "type": "number",
+      "unit": "mm",
+      "defaultValue": 2,
+      "min": 0,
+      "max": 8,
+      "step": 0.25,
+      "description": "Board side clearance.",
+      "required": true
+    },
+    {
+      "name": "standoffHeightMm",
+      "label": "Standoff height",
+      "type": "number",
+      "unit": "mm",
+      "defaultValue": 5,
+      "min": 2,
+      "max": 20,
+      "step": 0.5,
+      "description": "Board standoff height.",
+      "required": true
+    },
+    {
+      "name": "screwHoleDiameterMm",
+      "label": "Screw hole diameter",
+      "type": "number",
+      "unit": "mm",
+      "defaultValue": 3,
+      "min": 1.2,
+      "max": 8,
+      "step": 0.1,
+      "description": "Board screw hole clearance.",
+      "required": true
+    },
+    {
+      "name": "lidEnabled",
+      "label": "Generate lid",
+      "type": "boolean",
+      "unit": "",
+      "defaultValue": true,
+      "description": "Generate a separate lid STL.",
+      "required": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Small controller enclosure",
+      "description": "Base and lid for a compact control board.",
+      "parameterValues": {}
+    }
+  ],
+  "outputTypes": [ "stl", "log", "json", "notes" ]
+}

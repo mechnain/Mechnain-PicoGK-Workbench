@@ -1,0 +1,46 @@
+# .NET build artifacts
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# IDE
+.vs/
+.vscode/
+.idea/
+
+# Test output
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Logs (local validation / debug only)
+exports/logs/
+*.log
+
+# Generated run outputs — keep structure and small examples, ignore bulk local runs
+# Uncomment the next line to ignore all generated runs (recommended before first GitHub push):
+# exports/**/*
+# !exports/.gitkeep
+# !exports/runs_index.json
+# !exports/**/README.md
+
+# Ignore timestamped run folders but keep index and gitkeep
+exports/**/*
+!exports/.gitkeep
+!exports/runs_index.json
+
+# Ignore large STL artifacts in exports (regenerate via CLI); keep docs in run folders if needed
+exports/**/*.stl
+
+# User-specific project parameter saves (optional local variants)
+projects/**/*.json
+!projects/.gitkeep

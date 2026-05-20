@@ -1,0 +1,75 @@
+@page "/about"
+
+<PageTitle>About</PageTitle>
+
+<div class="wb-page-header d-flex flex-wrap align-items-start gap-3">
+    <img class="wb-hero-logo" src="assets/mechnain-logo.png" alt="Mechnain Labs" style="width: 72px; height: 72px;" />
+    <div>
+        <h1>About</h1>
+        <p class="lead mb-0">Independent local workbench for parameterized PicoGK mechanical design.</p>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h2 class="h5">What this is</h2>
+                <p>
+                    Mechnain PicoGK Workbench is a local .NET application that wraps LEAP 71’s PicoGK geometry kernel with
+                    a generator library, parameter editor, CLI runner, and organized export folders. It is built for
+                    measured, repeatable mechanical variants — enclosures, brackets, wheels, and test coupons — not for
+                    marketing demos or cloud-hosted CAD.
+                </p>
+
+                <h2 class="h5 mt-4">Why PicoGK</h2>
+                <p>
+                    PicoGK provides a computational geometry kernel for building implicit and voxel-based parts in C#.
+                    This workbench keeps PicoGK as the engine and adds manifests, run logging, and export structure so
+                    each design variant is traceable from parameters to STL.
+                </p>
+
+                <h2 class="h5 mt-4">Problem it solves</h2>
+                <p>
+                    Running many parameterized PicoGK experiments by hand means editing entry points, hunting for output
+                    files, and losing context between prints. The workbench centralizes generator selection, parameter
+                    entry, preview/final runs, and per-variant folders with JSON, logs, and notes.
+                </p>
+
+                <h2 class="h5 mt-4">What works today (MVP)</h2>
+                <ul>
+                    <li>Local Blazor UI with generator library and parameter pages</li>
+                    <li>CLI runner with <code>--list</code> and <code>--generator</code> execution</li>
+                    <li>Real PicoGK STL export where generators call <code>SaveStl</code> successfully</li>
+                    <li>Recent runs index and exports browser</li>
+                    <li>Built-in starter generators: primitive test, rover wheel, servo bracket, electronics enclosure, lattice coupon</li>
+                </ul>
+
+                <h2 class="h5 mt-4">Planned next</h2>
+                <ul class="text-muted">
+                    <li>In-browser STL preview (not implemented yet)</li>
+                    <li>Richer run detail and print/test templates</li>
+                    <li>More validated mechanical generators after print feedback</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card wb-mvp-panel">
+            <div class="card-body">
+                <h2 class="h6 wb-section-title">Attribution</h2>
+                <p class="small text-muted">
+                    This project uses LEAP 71’s PicoGK as the geometry kernel. PicoGK is an open-source computational
+                    geometry kernel. This workbench is an independent project and is not affiliated with or endorsed by LEAP 71.
+                </p>
+                <hr class="border-secondary" />
+                <h2 class="h6 wb-section-title">Scope honesty</h2>
+                <p class="small text-muted mb-0">
+                    Built-in generators are starter engineering templates. This is not topology optimization, generative
+                    AI design, or a finished commercial product. Long final-quality runs may block the UI until PicoGK completes.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

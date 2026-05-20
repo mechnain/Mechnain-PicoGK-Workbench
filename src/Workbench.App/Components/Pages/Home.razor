@@ -1,0 +1,81 @@
+@page "/"
+
+<PageTitle>Mechnain PicoGK Workbench</PageTitle>
+
+<section class="wb-hero">
+    <img class="wb-hero-logo" src="assets/mechnain-logo.png" alt="Mechnain Labs" />
+    <div>
+        <h1 class="wb-hero-title">Mechnain PicoGK Workbench</h1>
+        <p class="lead mb-0">Local computational engineering interface for parameterized mechanical design.</p>
+    </div>
+</section>
+
+<p class="page-lead">
+    Select a generator, edit dimensions, run PicoGK, and save fabrication-ready outputs with logs and parameters.
+</p>
+
+<div class="wb-workflow" aria-label="Engineering workflow">
+    <span class="wb-workflow-step">Parameters</span>
+    <span class="wb-workflow-arrow" aria-hidden="true">→</span>
+    <span class="wb-workflow-step">Geometry</span>
+    <span class="wb-workflow-arrow" aria-hidden="true">→</span>
+    <span class="wb-workflow-step">STL</span>
+    <span class="wb-workflow-arrow" aria-hidden="true">→</span>
+    <span class="wb-workflow-step">Print</span>
+    <span class="wb-workflow-arrow" aria-hidden="true">→</span>
+    <span class="wb-workflow-step">Test</span>
+    <span class="wb-workflow-arrow" aria-hidden="true">→</span>
+    <span class="wb-workflow-step">Iterate</span>
+</div>
+
+<div class="d-flex flex-wrap gap-2 mb-4">
+    <a class="btn btn-primary" href="generators">Open Generator Library</a>
+    <a class="btn btn-outline-primary" href="recent-runs">Recent Runs</a>
+    <a class="btn btn-outline-secondary" href="exports">Exported Artifacts</a>
+</div>
+
+<section class="wb-section-title">Workbench areas</section>
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card wb-feature-card h-100">
+            <div class="card-body d-flex flex-column">
+                <h2 class="card-title">Generator Library</h2>
+                <p class="text-muted flex-grow-1">Reusable PicoGK generators with manifests, default parameters, and measured-dimension fields.</p>
+                <a class="btn btn-outline-primary mt-2 align-self-start" href="generators">Browse generators</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card wb-feature-card h-100">
+            <div class="card-body d-flex flex-column">
+                <h2 class="card-title">Parameterized Runs</h2>
+                <p class="text-muted flex-grow-1">Preview and final generation with saved JSON parameters, run logs, and indexed history.</p>
+                <a class="btn btn-outline-primary mt-2 align-self-start" href="recent-runs">View runs</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card wb-feature-card h-100">
+            <div class="card-body d-flex flex-column">
+                <h2 class="card-title">Exported Artifacts</h2>
+                <p class="text-muted flex-grow-1">Organized run folders with STL files, parameters, notes, and print settings for each variant.</p>
+                <a class="btn btn-outline-primary mt-2 align-self-start" href="exports">Open exports</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="wb-section-title">Current MVP</section>
+<div class="card wb-mvp-panel">
+    <div class="card-body">
+        <ul>
+            <li><strong class="wb-status-ok">Local app running</strong> — Blazor UI for generator selection, parameters, and run output.</li>
+            <li><strong class="wb-status-ok">CLI runner connected</strong> — same generators and export layout from the command line.</li>
+            <li><strong class="wb-status-ok">Output folders saved</strong> — timestamped run directories under <code>exports/</code>.</li>
+            <li><strong class="wb-status-ok">PicoGK STL generation verified</strong> — <code>primitive-test</code> and additional generators have produced real STL artifacts.</li>
+        </ul>
+        <p class="small text-muted mb-0 mt-3">
+            Starter generators are engineering templates, not production-certified parts. No in-browser 3D viewer in this release.
+        </p>
+    </div>
+</div>

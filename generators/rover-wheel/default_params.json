@@ -1,0 +1,12 @@
+{
+  "outerDiameterMm": 80,
+  "wheelWidthMm": 28,
+  "hubDiameterMm": 28,
+  "axleHoleDiameterMm": 6,
+  "spokeCount": 8,
+  "spokeThicknessMm": 5,
+  "rimThicknessMm": 8,
+  "treadCount": 24,
+  "treadDepthMm": 4,
+  "treadWidthMm": 8
+}

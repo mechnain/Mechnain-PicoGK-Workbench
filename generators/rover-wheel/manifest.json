@@ -1,0 +1,142 @@
+{
+  "id": "rover-wheel",
+  "name": "Rover Wheel",
+  "description": "Parametric wheel with hub, axle hole, spokes, and repeated tread blocks.",
+  "category": "Mobility",
+  "difficulty": "Intermediate",
+  "requiredMeasurements": [
+    "Axle shaft diameter",
+    "Target tire outside diameter",
+    "Available chassis clearance"
+  ],
+  "parameters": [
+    {
+      "name": "outerDiameterMm",
+      "label": "Outer diameter",
+      "type": "number",
+      "unit": "mm",
+      "defaultValue": 80,
+      "min": 30,
+      "max": 160,
+      "step": 1,
+      "description": "Overall wheel diameter.",
+      "required": true
+    },
+    {
+      "name": "wheelWidthMm",
+      "label": "Wheel width",
+      "type": "number",
+      "unit": "mm",
+      "defaultValue": 28,
+      "min": 8,
+      "max": 80,
+      "step": 1,
+      "description": "Wheel width along the axle.",
+      "required": true
+    },
+    {
+      "name": "hubDiameterMm",
+      "label": "Hub diameter",
+      "type": "number",
+      "unit": "mm",
+      "defaultValue": 28,
+      "min": 8,
+      "max": 80,
+      "step": 1,
+      "description": "Center hub diameter.",
+      "required": true
+    },
+    {
+      "name": "axleHoleDiameterMm",
+      "label": "Axle hole diameter",
+      "type": "number",
+      "unit": "mm",
+      "defaultValue": 6,
+      "min": 2,
+      "max": 30,
+      "step": 0.5,
+      "description": "Center axle clearance hole.",
+      "required": true
+    },
+    {
+      "name": "spokeCount",
+      "label": "Spoke count",
+      "type": "integer",
+      "unit": "",
+      "defaultValue": 8,
+      "min": 3,
+      "max": 24,
+      "step": 1,
+      "description": "Number of radial spokes.",
+      "required": true
+    },
+    {
+      "name": "spokeThicknessMm",
+      "label": "Spoke thickness",
+      "type": "number",
+      "unit": "mm",
+      "defaultValue": 5,
+      "min": 2,
+      "max": 15,
+      "step": 0.5,
+      "description": "Spoke capsule diameter.",
+      "required": true
+    },
+    {
+      "name": "rimThicknessMm",
+      "label": "Rim thickness",
+      "type": "number",
+      "unit": "mm",
+      "defaultValue": 8,
+      "min": 3,
+      "max": 24,
+      "step": 0.5,
+      "description": "Radial rim thickness.",
+      "required": true
+    },
+    {
+      "name": "treadCount",
+      "label": "Tread count",
+      "type": "integer",
+      "unit": "",
+      "defaultValue": 24,
+      "min": 6,
+      "max": 64,
+      "step": 1,
+      "description": "Number of repeated tread blocks.",
+      "required": true
+    },
+    {
+      "name": "treadDepthMm",
+      "label": "Tread depth",
+      "type": "number",
+      "unit": "mm",
+      "defaultValue": 4,
+      "min": 0,
+      "max": 12,
+      "step": 0.5,
+      "description": "Radial tread block height.",
+      "required": true
+    },
+    {
+      "name": "treadWidthMm",
+      "label": "Tread width",
+      "type": "number",
+      "unit": "mm",
+      "defaultValue": 8,
+      "min": 2,
+      "max": 24,
+      "step": 0.5,
+      "description": "Tread block tangential width.",
+      "required": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "80 mm test wheel",
+      "description": "Small wheel suitable for tabletop rover prototypes.",
+      "parameterValues": {}
+    }
+  ],
+  "outputTypes": [ "stl", "log", "json", "notes" ]
+}

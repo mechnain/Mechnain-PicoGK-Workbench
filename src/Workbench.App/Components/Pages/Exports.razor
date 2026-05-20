@@ -1,0 +1,54 @@
+@page "/exports"
+@rendermode InteractiveServer
+@inject WorkbenchAppService Workbench
+
+<PageTitle>Exports</PageTitle>
+
+<div class="wb-page-header d-flex flex-wrap align-items-start justify-content-between gap-3">
+    <div>
+        <h1>Exports</h1>
+        <p class="lead mb-0">
+            Generated run folders containing STL files, JSON parameters, logs, and documentation artifacts.
+        </p>
+    </div>
+    <button class="btn btn-outline-primary" @onclick="OpenExports">Open exports folder</button>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <label class="form-label">Exports root</label>
+        <input class="form-control font-monospace" readonly value="@Workbench.ExportsDirectory" />
+    </div>
+</div>
+
+@if (Folders.Count == 0)
+{
+    <div class="alert alert-info">No export run folders found yet. Run a generator from the library or CLI to populate this list.</div>
+}
+else
+{
+    <div class="list-group">
+        @foreach (string folder in Folders)
+        {
+            <div class="list-group-item d-flex flex-wrap justify-content-between align-items-center gap-3">
+                <code class="wb-path flex-grow-1">@folder</code>
+                <a class="btn btn-sm btn-outline-primary" href="@($"run-output?outputDirectory={Uri.EscapeDataString(folder)}")">Open</a>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    IReadOnlyList<string> Folders = [];
+
+    protected override void OnInitialized()
+    {
+        Folders = Workbench.ExportRunFolders();
+    }
+
+    void OpenExports()
+    {
+        Directory.CreateDirectory(Workbench.ExportsDirectory);
+        Workbench.OpenFolder(Workbench.ExportsDirectory);
+    }
+}

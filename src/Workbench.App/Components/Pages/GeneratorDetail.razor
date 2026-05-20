@@ -1,0 +1,255 @@
+@page "/generators/{Id}"
+@rendermode InteractiveServer
+@inject WorkbenchAppService Workbench
+@inject NavigationManager Navigation
+
+<PageTitle>@Manifest?.Name</PageTitle>
+
+@if (Manifest is null)
+{
+    <p>Generator not found.</p>
+}
+else
+{
+    <div class="wb-page-header d-flex flex-wrap align-items-start justify-content-between gap-3">
+        <div>
+            <div class="wb-category mb-1">@Manifest.Category · @Manifest.Difficulty</div>
+            <h1>@Manifest.Name</h1>
+            <p class="lead mb-0">@Manifest.Description</p>
+        </div>
+        <a class="btn btn-outline-secondary" href="generators">Back to library</a>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Error))
+    {
+        <div class="alert alert-danger">@Error</div>
+    }
+    @if (!string.IsNullOrWhiteSpace(Status))
+    {
+        <div class="alert alert-info">@Status</div>
+    }
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="h5">Parameters</h2>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Project name</label>
+                            <input class="form-control" @bind="ProjectName" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Variant name</label>
+                            <input class="form-control" @bind="VariantName" />
+                        </div>
+
+                        @foreach (GeneratorParameter parameter in Manifest.Parameters)
+                        {
+                            <div class="col-md-6">
+                                <label class="form-label">@parameter.Label @Unit(parameter)</label>
+                                @if (parameter.Type == ParameterType.Boolean)
+                                {
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" checked="@BoolValues.GetValueOrDefault(parameter.Name)" @onchange="value => UpdateBool(parameter.Name, value.Value)" />
+                                        <label class="form-check-label">@parameter.Description</label>
+                                    </div>
+                                }
+                                else if (parameter.Type == ParameterType.Select)
+                                {
+                                    <select class="form-select" @bind="TextValues[parameter.Name]">
+                                        @foreach (string option in parameter.Options)
+                                        {
+                                            <option value="@option">@option</option>
+                                        }
+                                    </select>
+                                    <div class="form-text">@parameter.Description</div>
+                                }
+                                else
+                                {
+                                    <input class="form-control" type="@InputType(parameter)" min="@parameter.Min" max="@parameter.Max" step="@parameter.Step" value="@TextValues.GetValueOrDefault(parameter.Name)" @onchange="value => TextValues[parameter.Name] = value.Value?.ToString() ?? string.Empty" />
+                                    <div class="form-text">@parameter.Description</div>
+                                }
+                            </div>
+                        }
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-2 mt-4">
+                        <button class="btn btn-primary" disabled="@Running" @onclick='() => Generate("preview")'>Generate Preview</button>
+                        <button class="btn btn-outline-primary" disabled="@Running" @onclick='() => Generate("final")'>Generate Final</button>
+                        <button class="btn btn-outline-secondary" @onclick="LoadDefault">Load Default</button>
+                        <button class="btn btn-outline-secondary" @onclick="SavePreset">Save Preset</button>
+                        <button class="btn btn-outline-secondary" @onclick="SaveParametersJson">Save Parameters JSON</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="h5">Manifest</h2>
+                    <dl>
+                        <dt>Category</dt>
+                        <dd>@Manifest.Category</dd>
+                        <dt>Difficulty</dt>
+                        <dd>@Manifest.Difficulty</dd>
+                        <dt>Outputs</dt>
+                        <dd>@string.Join(", ", Manifest.OutputTypes)</dd>
+                    </dl>
+                    @if (Manifest.RequiredMeasurements.Count > 0)
+                    {
+                        <h3 class="h6">Required measurements</h3>
+                        <ul>
+                            @foreach (string measurement in Manifest.RequiredMeasurements)
+                            {
+                                <li>@measurement</li>
+                            }
+                        </ul>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public string? Id { get; set; }
+
+    GeneratorManifest? Manifest;
+    string ProjectName = "Workbench Project";
+    string VariantName = "variant_001";
+    string? Error;
+    string? Status;
+    bool Running;
+    Dictionary<string, string> TextValues = [];
+    Dictionary<string, bool> BoolValues = [];
+
+    protected override void OnParametersSet()
+    {
+        if (Id is null)
+            return;
+
+        Manifest = Workbench.GetManifest(Id);
+        LoadDefault();
+    }
+
+    void LoadDefault()
+    {
+        if (Manifest is null)
+            return;
+
+        foreach (GeneratorParameter parameter in Manifest.Parameters)
+        {
+            if (parameter.Type == ParameterType.Boolean)
+                BoolValues[parameter.Name] = Convert.ToBoolean(parameter.DefaultValue);
+            else
+                TextValues[parameter.Name] = Convert.ToString(parameter.DefaultValue, System.Globalization.CultureInfo.InvariantCulture) ?? "";
+        }
+
+        Status = null;
+    }
+
+    async Task Generate(string quality)
+    {
+        if (Manifest is null)
+            return;
+
+        Error = null;
+        Running = true;
+        await Task.Yield();
+
+        try
+        {
+            GenerationResult result = Workbench.Generate(Manifest.Id, ProjectName, VariantName, quality, BuildValues());
+            Navigation.NavigateTo($"run-output?outputDirectory={Uri.EscapeDataString(result.OutputDirectory)}");
+        }
+        catch (Exception exception)
+        {
+            Error = exception.Message;
+        }
+        finally
+        {
+            Running = false;
+        }
+    }
+
+    void SaveParametersJson()
+    {
+        if (Manifest is null)
+            return;
+
+        string root = WorkbenchPaths.FindRepositoryRoot();
+        string path = Path.Combine(root, "projects", $"{Manifest.Id}_{WorkbenchPaths.SanitizeSegment(VariantName)}_params.json");
+        Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+        File.WriteAllText(path, System.Text.Json.JsonSerializer.Serialize(BuildValues(), WorkbenchJson.Options));
+        Status = $"Saved parameters to {path}";
+    }
+
+    void SavePreset()
+    {
+        if (Manifest is null)
+            return;
+
+        string root = WorkbenchPaths.FindRepositoryRoot();
+        string presetDirectory = Path.Combine(root, "projects", "presets");
+        Directory.CreateDirectory(presetDirectory);
+
+        GeneratorPreset preset = new()
+        {
+            Name = VariantName,
+            Description = $"Saved from {Manifest.Name} parameter editor.",
+            ParameterValues = BuildValues()
+        };
+
+        string path = Path.Combine(presetDirectory, $"{Manifest.Id}_{WorkbenchPaths.SanitizeSegment(VariantName)}_preset.json");
+        File.WriteAllText(path, System.Text.Json.JsonSerializer.Serialize(preset, WorkbenchJson.Options));
+        Status = $"Saved preset to {path}";
+    }
+
+    Dictionary<string, object?> BuildValues()
+    {
+        Dictionary<string, object?> values = [];
+
+        foreach (GeneratorParameter parameter in Manifest!.Parameters)
+        {
+            if (parameter.Type == ParameterType.Boolean)
+            {
+                values[parameter.Name] = BoolValues.GetValueOrDefault(parameter.Name);
+            }
+            else if (parameter.Type is ParameterType.Number or ParameterType.Integer)
+            {
+                string text = TextValues.GetValueOrDefault(parameter.Name, "0");
+                values[parameter.Name] = double.Parse(text, System.Globalization.CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                values[parameter.Name] = TextValues.GetValueOrDefault(parameter.Name, "");
+            }
+        }
+
+        return values;
+    }
+
+    void UpdateBool(string name, object? value)
+    {
+        if (value is bool typed)
+        {
+            BoolValues[name] = typed;
+            return;
+        }
+
+        BoolValues[name] = bool.TryParse(value?.ToString(), out bool parsed) && parsed;
+    }
+
+    static string InputType(GeneratorParameter parameter)
+    {
+        return parameter.Type is ParameterType.Number or ParameterType.Integer ? "number" : "text";
+    }
+
+    static string Unit(GeneratorParameter parameter)
+    {
+        return string.IsNullOrWhiteSpace(parameter.Unit) ? "" : $"({parameter.Unit})";
+    }
+}

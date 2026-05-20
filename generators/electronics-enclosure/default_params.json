@@ -1,0 +1,10 @@
+{
+  "boardLengthMm": 70,
+  "boardWidthMm": 45,
+  "boardHeightMm": 14,
+  "wallThicknessMm": 3,
+  "clearanceMm": 2,
+  "standoffHeightMm": 5,
+  "screwHoleDiameterMm": 3,
+  "lidEnabled": true
+}

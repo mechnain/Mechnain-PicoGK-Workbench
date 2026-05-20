@@ -1,0 +1,63 @@
+@page "/documentation"
+@inject WorkbenchAppService Workbench
+
+<PageTitle>Documentation</PageTitle>
+
+<div class="wb-page-header">
+    <h1>Documentation</h1>
+    <p class="lead mb-0">
+        Setup, workflow, generator authoring, and portfolio export notes for this local workbench.
+    </p>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <label class="form-label">Docs folder</label>
+        <input class="form-control font-monospace" readonly value="@Workbench.DocsDirectory" />
+    </div>
+</div>
+
+<div class="row g-3">
+    @foreach (DocEntry doc in DocEntries)
+    {
+        <div class="col-md-6 col-xl-4">
+            <div class="card wb-doc-card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h2 class="card-title">@doc.Title</h2>
+                    <p class="text-muted flex-grow-1">@doc.Summary</p>
+                    <p class="small wb-path mb-0">docs/@doc.FileName</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    IReadOnlyList<DocEntry> DocEntries = [];
+
+    protected override void OnInitialized()
+    {
+        Dictionary<string, (string Title, string Summary)> known = new(StringComparer.OrdinalIgnoreCase)
+        {
+            ["setup.md"] = ("Setup", "Prerequisites, restore, build, run the app and CLI, and output folder layout."),
+            ["workflow.md"] = ("Workflow", "Parameter entry through preview, final STL, print, test, and iteration."),
+            ["generator_authoring.md"] = ("Generator authoring", "Add manifests, generator classes, registry entries, and CLI verification."),
+            ["portfolio_export.md"] = ("Portfolio export", "Turn run folders into README sections, LinkedIn posts, and resume bullets.")
+        };
+
+        DocEntries = Workbench.DocumentationFiles()
+            .Select(path =>
+            {
+                string fileName = Path.GetFileName(path);
+                known.TryGetValue(fileName, out var meta);
+                return new DocEntry(
+                    fileName,
+                    path,
+                    meta.Title ?? fileName,
+                    meta.Summary ?? "Project documentation.");
+            })
+            .ToList();
+    }
+
+    sealed record DocEntry(string FileName, string FullPath, string Title, string Summary);
+}
